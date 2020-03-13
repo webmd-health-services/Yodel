@@ -20,8 +20,18 @@ Build:
     DeleteSourceFiles: true
     TextSeparator: "$(NewLine)$(NewLine)"
 
+- File:
+    IfExists: env:APPVEYOR
+    Path: Tests\Server.txt
+    Content: '.\SQL2017'
+
+- File:
+    UnlessExists: env:APPVEYOR
+    Path: Tests\Server.txt
+    Content: '.'
+
 - Pester4:
-    Path: Tests\*.Tests.ps1
+    Script: Tests\*.Tests.ps1
 
 - Zip:
     ArchivePath: .output\Yodel.zip

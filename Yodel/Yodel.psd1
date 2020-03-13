@@ -68,6 +68,7 @@
 
     # Functions to export from this module. Only list public function here.
     FunctionsToExport = @(
+                            'Invoke-YSqlQuery'
                          )
 
     # Cmdlets to export from this module. By default, you get a script module, so there are no cmdlets.
