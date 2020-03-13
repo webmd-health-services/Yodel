@@ -10,7 +10,7 @@
     RootModule = 'Yodel.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.0.0'
+    ModuleVersion = '1.0.0'
 
     # ID used to uniquely identify this module
     GUID = 'E15575BE-4C09-487D-B831-BCE4FCCFFBC4'

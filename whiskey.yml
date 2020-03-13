@@ -1,0 +1,53 @@
+
+PublishOn:
+- master
+- prerelease
+
+Build:
+- Version:
+    Path: Yodel\Yodel.psd1
+    Prerelease:
+    - prerelease: alpha.$(WHISKEY_BUILD_NUMBER)
+
+# Dot-sourcing files is expensive. Move all functions into your .psm1 file to
+# improve import speed. Do this before testing to ensure your module still 
+# works.
+- MergeFile:
+    OnlyBy: BuildServer
+    Path:
+    - Yodel\Functions\*.ps1
+    DestinationPath: Yodel\Yodel.psm1
+    DeleteSourceFiles: true
+    TextSeparator: "$(NewLine)$(NewLine)"
+
+- Pester4:
+    Path: Tests\*.Tests.ps1
+
+- Zip:
+    ArchivePath: .output\Yodel.zip
+    Path:
+    - Yodel
+    Exclude:
+    - "*.orig"
+
+Publish:
+- PublishPowerShellModule:
+    UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
+    Path: Yodel
+    RepositoryName: PSGallery
+    RepositoryUri: https://www.powershellgallery.com/api/v2/
+    ApiKeyID: powershellgallery.com
+
+- GitHubRelease:
+    UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
+    RepositoryName: webmd-health-services/Yodel
+    ApiKeyID: github.com
+    Tag: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
+    Commitish: $(WHISKEY_SCM_COMMIT_ID)
+    Name: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
+    Description: $(RELEASE_NOTES)
+    Assets:
+    - Path: .output\Yodel.zip
+      ContentType: application/zip
+      Name: Yodel-$(WHISKEY_SEMVER2_NO_BUILD_METADATA).zip
+
