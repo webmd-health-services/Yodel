@@ -28,7 +28,7 @@
     Copyright = '(c) 2020 WebMD Health Services. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description = 'A PowerShell module for querying SQL data sources using .NET''s native ADO.NET data access framework.'
+    Description = 'A PowerShell module for querying SQL (and other) data sources using .NET''s native ADO.NET data access framework.'
 
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '5.1'
@@ -68,7 +68,8 @@
 
     # Functions to export from this module. Only list public function here.
     FunctionsToExport = @(
-                            'Invoke-YSqlQuery'
+                            'Connect-YDatabase',
+                            'Invoke-YDbCommand'
                          )
 
     # Cmdlets to export from this module. By default, you get a script module, so there are no cmdlets.
@@ -95,13 +96,13 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags = @( 'sql', 'query', 'ado', 'ado.net', 'database', 'DB', 'data', 'entity', 'SqlServer', 'Oracle', 'odbc' )
+            Tags = @( 'sql', 'query', 'ado', 'ado.net', 'database', 'db', 'data', 'entity', 'sqlserver', 'oracle', 'odbc', 'ole' )
 
             # A URL to the license for this module.
             LicenseUri = ' http://www.apache.org/licenses/LICENSE-2.0'
 
             # A URL to the main website for this project.
-            ProjectUri = 'https://whsbitbucket.webmd.net/projects/POWERSHELL/repos/Yodel/browse'
+            ProjectUri = 'https://github.com/webmd-health-services/Yodel'
 
             # A URL to an icon representing this module.
             # IconUri = ''
@@ -111,6 +112,8 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = @'
+* Created Connect-YDatabase function for connecting to an ADO.NET data source, like a SQL Server database.
+* Created Invoke-YDbCommand function for executing an ADO.NET command, like a SQL query or stored procedure.
 '@
         } # End of PSData hashtable
 
