@@ -69,7 +69,8 @@
     # Functions to export from this module. Only list public function here.
     FunctionsToExport = @(
                             'Connect-YDatabase',
-                            'Invoke-YDbCommand'
+                            'Invoke-YDbCommand',
+                            'Invoke-YSqlServerCommand'
                          )
 
     # Cmdlets to export from this module. By default, you get a script module, so there are no cmdlets.

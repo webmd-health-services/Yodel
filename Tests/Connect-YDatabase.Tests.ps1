@@ -89,27 +89,7 @@ Describe 'Connect-YDatabase.when connecting to SQL Server with credential' {
     AfterEach { Reset }
     It 'should open the connection' {
         Init
-        $credential = [pscredential]::New(('yodeltest' -f [Environment]::MachineName), (ConvertTo-SecureString -String 'P@$$w0rd' -Force -AsPlainText))
-        $conn = Connect-YDatabase -SqlServerName $sqlServerName -DatabaseName 'master'
-        try
-        {
-            $cmd = $conn.CreateCommand()
-            $cmd.CommandText = 'if not exists (select * from [sys].[server_principals] where name = ''{0}'') create login [{0}] with password = ''P@$$w0rd''' -f $credential.UserName
-            $cmd.ExecuteNonQuery()
-
-            $cmd.CommandText = 'if not exists (select * from [sys].[database_principals] where name = ''{0}'') create user [{0}] for login [{0}]' -f $credential.UserName
-            $cmd.ExecuteNonQuery()
-
-            $cmd.CommandText = 'sp_addrolemember'
-            $cmd.CommandType = 'StoredProcedure'
-            $cmd.Parameters.Add('@rolename', 'db_datareader')
-            $cmd.Parameters.Add('@membername', $credential.UserName)
-            $cmd.ExecuteNonQuery()
-        }
-        finally
-        {
-            $cmd.Dispose()
-        }
+        $credential = GivenTestUser -SqlServerName $sqlServerName
         WhenOpeningConnection -ToServer $sqlServerName -ToDatabase 'master' -WithCredential $credential
         ThenConnectionOpened
     }
