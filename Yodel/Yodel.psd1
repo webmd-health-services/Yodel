@@ -22,7 +22,7 @@
     CompanyName = 'WebMD Health Services'
 
     # If you want to support .NET Core, add 'Core' to this list.
-    CompatiblePSEditions = @( 'Desktop' )
+    CompatiblePSEditions = @( 'Desktop', 'Core' )
 
     # Copyright statement for this module
     Copyright = '(c) 2020 WebMD Health Services. All rights reserved.'

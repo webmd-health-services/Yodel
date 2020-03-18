@@ -75,7 +75,7 @@ function Invoke-YDbCommand
         # The connection to use.
         [Data.Common.DbConnection]$Connection,
 
-        [Parameter(Mandatory,Position=1)]
+        [Parameter(Mandatory,Position=1,ValueFromPipeline)]
         # The command to run/execute.
         [String]$Text,
 

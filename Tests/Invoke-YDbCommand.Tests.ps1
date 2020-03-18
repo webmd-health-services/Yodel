@@ -82,14 +82,14 @@ Describe 'Invoke-YDbCommand' {
     It 'should respect user''s timeout' {
         $Global:Error.Clear()
         Invoke-YDbCommand -Connection $masterConn -Text 'WAITFOR DELAY ''00:00:02''' -Timeout 2 -ErrorAction SilentlyContinue
-        $Global:Error | Should -Match 'execution timeout expired'
+        $Global:Error | Should -Match 'timeout expired'
     }
 
     It 'should respect Ignore error action preference and preserve error' {
         $Global:Error.Clear()
         Invoke-YDbCommand -Connection $masterConn -Text 'WAITFOR DELAY ''00:00:02''' -Timeout 2 -ErrorAction Ignore
         $Global:Error | Should -HaveCount 1
-        $Global:Error | Should -Match 'Execution Timeout Expired'
+        $Global:Error | Should -Match 'timeout expired'
     }
 
     It 'should support transactions' {

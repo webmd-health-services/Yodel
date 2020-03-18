@@ -54,7 +54,7 @@ function Invoke-YSqlServerCommand
     Demonstrates how to use parameterized queries.
 
     .EXAMPLE
-    Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'sp_addrolemember' -CommandType [Data.CommandType]::StoredProcedure -Parameter @{ '@rolename = 'db_owner'; '@membername' = 'myuser'; }
+    Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'sp_addrolemember' -CommandType [Data.CommandType]::StoredProcedure -Parameter @{ '@rolename' = 'db_owner'; '@membername' = 'myuser'; }
 
     Demonstrates how to execute a stored procedure, including how to pass its parameters using the `Parameter` parameter.
 

@@ -107,7 +107,7 @@ Describe 'Invoke-YSqlServerCommand.when customizing command timeout' {
         $Global:Error.Clear()
         Invoke-YSqlServerCommand -SqlServerName $sqlServerName -DatabaseName 'master' -Text 'WAITFOR DELAY ''00:00:02''' -Timeout 1 -ErrorAction SilentlyContinue
         $Global:Error | Should -HaveCount 2
-        $Global:Error | Should -Match 'execution timeout expired'
+        $Global:Error | Should -Match 'timeout expired'
     }
 }
 
