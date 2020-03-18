@@ -48,6 +48,13 @@ Publish:
     RepositoryUri: https://www.powershellgallery.com/api/v2/
     ApiKeyID: powershellgallery.com
 
+- SetVariableFromPowerShellDataFile:
+    Path: Yodel\Yodel.psd1
+    Variables:
+        PrivateData:
+            PSData:
+                ReleaseNotes: RELEASE_NOTES
+
 - GitHubRelease:
     UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
     RepositoryName: webmd-health-services/Yodel
