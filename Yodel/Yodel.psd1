@@ -1,8 +1,3 @@
-#
-# Module manifest for module '<$- moduleName '
-#
-# Generated on: Fri Mar 13 2020 15:34:51 GMT-0700 (Pacific Daylight Time)
-#
 
 @{
 
@@ -100,7 +95,7 @@
             Tags = @( 'sql', 'query', 'ado', 'ado.net', 'database', 'db', 'data', 'entity', 'sqlserver', 'oracle', 'odbc', 'ole' )
 
             # A URL to the license for this module.
-            LicenseUri = ' http://www.apache.org/licenses/LICENSE-2.0'
+            LicenseUri = 'http://www.apache.org/licenses/LICENSE-2.0'
 
             # A URL to the main website for this project.
             ProjectUri = 'https://github.com/webmd-health-services/Yodel'

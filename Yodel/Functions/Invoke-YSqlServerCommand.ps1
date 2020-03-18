@@ -49,7 +49,7 @@ function Invoke-YSqlServerCommand
     Demonstrates how to execute a command that doesn't return a value.  If your command updates/deletes rows, the number of rows affected is returned.
 
     .EXAMPLE
-    Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into MyTable (Two,Three) values @Column2, @Column3' -Parameter @{ Column2 = 'Value2'; Column3 = 'Value3' } -NonQuery
+    Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into MyTable (Two,Three) values @Column2, @Column3' -Parameter @{ '@Column2' = 'Value2'; '@Column3' = 'Value3' } -NonQuery
 
     Demonstrates how to use parameterized queries.
 

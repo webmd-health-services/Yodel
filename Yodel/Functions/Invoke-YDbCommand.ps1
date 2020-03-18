@@ -45,7 +45,7 @@ function Invoke-YDbCommand
     Demonstrates how to execute a command that doesn't return a value.  If your command updates/deletes rows, the number of rows affected is returned.
 
     .EXAMPLE
-    Invoke-YDbCommand -Connection $conn -Text 'insert into MyTable (Two,Three) values @Column2, @Column3' -Parameter @{ Column2 = 'Value2'; Column3 = 'Value3' } -NonQuery
+    Invoke-YDbCommand -Connection $conn -Text 'insert into MyTable (Two,Three) values @Column2, @Column3' -Parameter @{ '@Column2' = 'Value2'; '@Column3' = 'Value3' } -NonQuery
 
     Demonstrates how to use parameterized queries.
 

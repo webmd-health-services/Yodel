@@ -116,7 +116,7 @@ S                        False sysallocunits                                SYST
 S                        False sysfiles1                                    SYSTEM_TABLE                 4          True                0               False 4/8/2003 9:13:37 AM 
 ```
 
-The above example will connect to the master database in the local, default intance of SQL Server as the current user, and run the query `select 1` using integrated authentication. You'll get back an object for each row returned. Each object will have properties that match the column names in the result set. (If a column is missing a name, `Invoke-YSqlServerCommand` will create a generic `ColumnX` name for you, where `X` is number that increments for each nameless column.)
+The above example will connect to the master database in the local, default intance of SQL Server as the current user, and run the query `select * from sys.object` using integrated authentication. You'll get back an object for each row returned. Each object will have properties that match the column names in the result set. (If a column is missing a name, `Invoke-YSqlServerCommand` will create a generic `ColumnX` name for you, where `X` is number that increments for each nameless column.)
 
 ## SQL Server: Run a Query That Returns a Single/Scalar Value
 

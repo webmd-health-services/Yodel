@@ -7,7 +7,7 @@ function Get-YTSqlServerName
 
 function Get-YTUserCredential
 {
-    [pscredential]::New(('yodeltest' -f [Environment]::MachineName), (ConvertTo-SecureString -String 'P@$$w0rd' -Force -AsPlainText))
+    [pscredential]::New('yodeltest', (ConvertTo-SecureString -String 'P@$$w0rd' -Force -AsPlainText))
 }
 
 function GivenTestUser

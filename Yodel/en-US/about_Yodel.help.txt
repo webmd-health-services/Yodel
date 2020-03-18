@@ -2,8 +2,94 @@ TOPIC
     about_Yodel
 
 SHORT DESCRIPTION
-    Yodel is a PowerShell module for...
+    Yodel is a PowerShell module for querying databases using the native .NET
+    ADO.NET data access framework. 
 
 LONG DESCRIPTION
-    The Yodel PowerShell module...
 
+    # Usage
+
+    ## SQL Server
+
+    The simplest command to use is `Invoke-YSqlServerCommand`. It connects to a 
+    SQL Server instance and database, runs a query, and closes the connection.
+    Pass the name of the SQL Server instance to the `SqlServerName` parameter
+    (`.` or the machine name for the default instance, `HOSTNAME\INSTANCE` for a
+    named instance), the name of the database to the `Database` parameter, and
+    the query to the `Text` parameter:
+
+        > Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1 First, 2, 3'
+
+        First Column0 Column1
+        ----- ------- -------
+            1       2       3
+
+    You'll get an object back for each row returned. Each object will have
+    properties for each column. If a column doesn't have a name, Yodel will use
+    a generic `ColumnX` name, where X is an incrementing number.
+
+    If you have a query that returns a single value, use the `-AsScalar` switch:
+
+        > Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
+        1
+
+    If your query doesn't return any results, use the `-NonQuery` switch. It
+    will return the number of rows inserted/deleted (if any).
+
+        > Invoke-YSqlServerCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into example (id) values (1),(2),(3),(4)'
+        4
+
+    ## Querying Other Databases
+
+    If you need to connect to another database, or need to use the same
+    connection to run multiple queries, use `Connect-YDatabase` to connect to a
+    database and `Invoke-YDbCommand` to run your queries/commands.
+
+    `Connect-YDatabase` takes a `System.Data.Common.DbProviderFactory` instance
+    and uses that object to create the connection and connection string. .NET
+    has built-in providers for SQL Server (shown below), Oracle, ODBC, and OLE
+    providers (see example further below).
+
+        $connection = Connect-YDatabase -Provider ([Data.SqlClient.SqlProviderFactory]::Instance) `
+                                        -ConnectionString 'some connection string'
+        try
+        {
+            Invoke-YDbCommand -Connection $connection
+        }
+        finally
+        {
+            # Don't forget to close the connection!
+            $connection.Close()
+        }
+
+    The `Invoke-YDbCommand` takes in a generic ADO.NET connection (a class that
+    inherits from `System.Data.Common.DbConnection`). It calls `CreateCommand()`
+    on the connection. So, you can create your own connection and pass it to
+    `Invoke-YDbCommand`:
+
+        $connection = New-Object 'Data.SqlClient.SqlConnection'
+        $connection.ConnectionString = 'some connection string'
+        # Do some custom configuration on the connection.
+        $connection.Open()
+
+        try
+        {
+            Invoke-YDbCommand -Connection $connection -Text 'select 1'
+        }
+        finally
+        {
+            # Don't forget to close the connection!
+            $connection.Close()
+        }
+
+EXAMPLES
+    Full examples are available on the [project website](https://github.com/webmd-health-services/Yodel)
+    and in the help documentation for each function.
+
+LINKS
+    https://github.com/webmd-health-services/Yodel
+
+SEE ALSO
+    Connect-YDatabase
+    Invoke-YDbCommand
+    Invoke-YSqlServerCommand
