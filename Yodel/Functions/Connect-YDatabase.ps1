@@ -8,11 +8,11 @@ function Connect-YDatabase
     .DESCRIPTION
     The `Connect-YDatabase` function opens an ADO.NET (i.e. pure .NET) connection to a database. Pass the connection string to the `ConnectionString` parameter. Pass the provider to use to connect to the `Provider` parameter. This parameter should be an instance of a `Data.Common.DbProviderFactory` object. The .NET framework ships with several:
 
-    * SQL Server: `Connect-YDatabase -Provider ([Data.SqlClient.SqlClientFactory]::Instance`
+    * SQL Server: `Connect-YDatabase -Provider ([Data.SqlClient.SqlClientFactory]::Instance)`
     * ODBC: `Connect-YDatabase -Provider ([Data.Odbc.OdbcFactory]::Instance)`
     * OLE: `Connect-YDatabase -Provider ([Data.OleDb.OleDbFactory]::Instance)`
     * Entity Framework: `Connect-YDatabase -Provider ([Data.EntityClient.EntityProviderFactory]::Instance)`
-    * Oracle: `Connect-YDatabase -Provider ([[Data.OracleClient.OracleClientFactory]::Instance)`
+    * Oracle: `Connect-YDatabase -Provider ([Data.OracleClient.OracleClientFactory]::Instance)`
 
     The function uses each provider to create a connection object, sets that connection's connection string, open the connection, and then returns the connection.
 
@@ -86,7 +86,7 @@ function Connect-YDatabase
 
         # The connection timeout. By default, uses the .NET default of 30 seconds. If it takes longer than this number of seconds to connect, the function will fail.
         #
-        # Setting this property adds a `Connection Timeout` property to the connection string, unless you're connecting via ODBC.
+        # Setting this property adds a `Connection Timeout` property to the connection string if you're connecting to a SQL Server database (i.e. using the `SqlServerName` parameter). If you're connecting via ODBC, the `ConnectionTimeout` property is set. In all other cases, this parameter is ignored.
         #
         # If you get an error that `ConnectionTimeout` is a read-only property, you'll need to pass the timeout as a property in your connection string.
         [int]$ConnectionTimeout
