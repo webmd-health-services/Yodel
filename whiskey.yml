@@ -45,8 +45,28 @@ Build:
     Exclude:
     - "*.orig"
 
+- Pester:
+    Configuration:
+        TestResult:
+            Enabled: true
+            OutputPath: .output\pester.xml
+            TestSuiteName: Yodel
+        Output:
+            Verbosity: Detailed
+        Run:
+            Path: Test\*.Tests.ps1
+            ExcludePath:
+            - "*\\Connect-YDatabase.Tests.ps1"
+            - "*\\Import-Yodel.Tests.ps1"
+            - "*\\Invoke-YDbCommand.Tests.ps1"
+            - "*\\Yodel.Tests.ps1"
+
 - Pester4:
-    Script: Tests\*.Tests.ps1
+    Script:
+    - Test\Connect-YDatabase.Tests.ps1
+    - Test\Import-Yodel.Tests.ps1
+    - Test\Invoke-YDbCommand.Tests.ps1
+    - Test\Yodel.Tests.ps1
 
 Publish:
 - PublishPowerShellModule:

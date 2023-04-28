@@ -1,8 +1,21 @@
 
+$script:moduleRoot = $PSScriptRoot
+
 function Get-YTSqlServerName
 {
-    Get-Content -Path (Join-Path -Path $PSScriptRoot -ChildPath '..\Server.txt' -Resolve) |
-        Select-Object -First 1
+    $serverTxtPath = Join-Path -Path $script:moduleRoot -ChildPath '..\Server.txt' -Resolve -ErrorAction Ignore
+
+    if ($serverTxtPath)
+    {
+        $sqlServerName = Get-Content -Path $serverTxtPath | Select-Object -First 1
+    }
+
+    if (-not $sqlServerName)
+    {
+        return '.'
+    }
+
+    return $sqlServerName
 }
 
 function Get-YTUserCredential
