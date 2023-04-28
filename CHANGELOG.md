@@ -1,5 +1,14 @@
-
+<!-- markdownlint-disable MD012 no-multiple-blanks -->
 # Yodel Changelog
+
+## 1.1.0
+
+> Released 1 May 2023
+
+### Added
+
+* `Connection` parameter to `Invoke-YSqlServerCommand`.
+
 
 ## 1.0.0
 

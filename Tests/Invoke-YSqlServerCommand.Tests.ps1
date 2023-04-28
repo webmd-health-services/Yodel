@@ -170,4 +170,11 @@ Describe 'Invoke-YSqlServerCommand' {
                                            -AsScalar
         $result | Should -Be $credential.UserName
     }
+
+    It 'can use someone else''s connection' {
+        Invoke-YSqlServerCommand -Connection $script:masterConn -Text 'select db_name()' -AsScalar | Should -Be 'master'
+        # Run twice to make sure our connection isn't closed/disposed.
+        Invoke-YSqlServerCommand -Connection $script:masterConn -Text 'select db_name()' -AsScalar | Should -Be 'master'
+        $Global:Error | Should -BeNullOrEmpty
+    }
 }
