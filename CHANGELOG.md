@@ -1,4 +1,5 @@
 <!-- markdownlint-disable MD012 no-multiple-blanks -->
+
 # Yodel Changelog
 
 ## 1.1.0
@@ -8,6 +9,16 @@
 ### Added
 
 * `Connection` parameter to `Invoke-YSqlServerCommand`.
+
+### Changed
+
+* The `Invoke-YSqlServerCommand` was renamed to `Invoke-MSSqlCommand`. Please update usages. The old name remains, but
+you'll get a warning if you use it.
+
+### Deprecated
+
+* The `Invoke-YSqlServerCommand` function. Replace with `Invoke-MSSqlCommand`. Functionality not affectd, just the
+name.
 
 
 ## 1.0.0

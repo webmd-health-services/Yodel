@@ -15,13 +15,13 @@ AfterAll {
     $script:masterConn.Close()
 }
 
-Describe 'Invoke-YSqlServerCommand' {
+Describe 'Invoke-YMSSqlCommand' {
     BeforeEach {
         $Global:Error.Clear()
     }
 
     It 'returns objects for each row' {
-        $row = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select * from sys.system_views'
+        $row = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select * from sys.system_views'
         $row | Should -Not -BeNullOrEmpty
         $row | Should -BeOfType ([PSObject])
         # Make sure objects get properties for each column.
@@ -30,7 +30,7 @@ Describe 'Invoke-YSqlServerCommand' {
     }
 
     It 'gives each unnamed column a name' {
-        $row = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select 1, 2, 3'
+        $row = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select 1, 2, 3'
         $row | Should -Not -BeNullOrEmpty
         $row | Should -HaveCount 1
         $row.Column0 | Should -Be 1
@@ -39,17 +39,17 @@ Describe 'Invoke-YSqlServerCommand' {
     }
 
     It 'executes scalar' {
-        $val = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select 1' -AsScalar
+        $val = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select 1' -AsScalar
         $val | Should -Be 1
     }
 
     It 'executes non query that affects no rows' {
-        $value = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select * from sys.system_views' -NonQuery
+        $value = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select * from sys.system_views' -NonQuery
         $value | Should -BeNullOrEmpty
     }
 
     It 'executes parameterized queries' {
-        $value = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select * from [sys].[system_views] where name = @view_name' -Parameter @{ 'view_name' = 'system_views'; }
+        $value = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text 'select * from [sys].[system_views] where name = @view_name' -Parameter @{ 'view_name' = 'system_views'; }
         $value | Should -Not -BeNullOrEmpty
         $value | Should -HaveCount 1
         $value.name | Should -Be 'system_views'
@@ -57,16 +57,16 @@ Describe 'Invoke-YSqlServerCommand' {
 
     It 'executes non query that effects rows' {
         $cmd = 'if not exists (select * from sys.tables where name = ''YodelTable'') create table [YodelTable] (id int not null identity, name nvarchar not null)'
-        Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text $cmd -NonQuery |
+        Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text $cmd -NonQuery |
             Should -BeNullOrEmpty
         for( $idx = 0; $idx -lt 5; ++$idx )
         {
             $cmd = 'insert into YodelTable (name) values (''{0}'')' -f $idx
-            Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text $cmd -NonQuery |
+            Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -Text $cmd -NonQuery |
                 Should -Be 1
         }
 
-        $rowsAffected = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        $rowsAffected = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                                  -DatabaseName 'master' `
                                                  -Text 'delete from YodelTable' `
                                                  -NonQuery
@@ -75,11 +75,11 @@ Describe 'Invoke-YSqlServerCommand' {
 
     It 'executes sprocs' {
         $table =
-            Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+            Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                      -DatabaseName 'master' `
                                      -Text 'select * from sys.tables' |
             Select-Object -First 1
-        $result = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        $result = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                            -DatabaseName 'master' `
                                            -Text 'sp_tables' `
                                            -Parameter @{ '@table_name' = $table.name } `
@@ -90,7 +90,7 @@ Describe 'Invoke-YSqlServerCommand' {
     }
 
     It 'writes query and query timings to the verbose stream' {
-        $msg = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        $msg = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                         -DatabaseName 'master' `
                                         -Text ('WAITFOR{0}DELAY{0}''00:00:01''' -f [Environment]::NewLine) `
                                         -NonQuery `
@@ -104,7 +104,7 @@ Describe 'Invoke-YSqlServerCommand' {
 
     It 'does not call write verbose if verbose is off' {
         $VerbosePreference = 'Continue'
-        $msg = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        $msg = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                         -DatabaseName 'master' `
                                         -Text 'WAITFOR DELAY ''00:00:00.001''' `
                                         -NonQuery `
@@ -115,7 +115,7 @@ Describe 'Invoke-YSqlServerCommand' {
 
     It 'can customize command timeout' {
         $Global:Error.Clear()
-        Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                  -DatabaseName 'master' `
                                  -Text 'WAITFOR DELAY ''00:00:02''' `
                                  -Timeout 1 `
@@ -128,7 +128,7 @@ Describe 'Invoke-YSqlServerCommand' {
         $failed = $false
         try
         {
-            Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+            Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                      -DatabaseName 'master' `
                                      -Text 'WAITFOR DELAY ''00:00:05''' `
                                      -Timeout 2 `
@@ -145,7 +145,7 @@ Describe 'Invoke-YSqlServerCommand' {
     It 'receives queries from the pipeline' {
         $results =
             'select 1','select 2' |
-            Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -AsScalar
+            Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName -DatabaseName 'master' -AsScalar
         $results | Should -HaveCount 2
         $results[0] | Should -Be 1
         $results[1] | Should -Be 2
@@ -153,7 +153,7 @@ Describe 'Invoke-YSqlServerCommand' {
 
     It 'can use custom connection string' {
         $connString = 'Server=example.com;Database=example.com;Application Name=Yodel'
-        $result = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        $result = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                            -DatabaseName 'master' `
                                            -ConnectionString $connString `
                                            -Text 'select APP_NAME()' `
@@ -163,7 +163,7 @@ Describe 'Invoke-YSqlServerCommand' {
 
     It 'can login with a credential' {
         $credential = GivenTestUser -SqlServerName $script:sqlServerName
-        $result = Invoke-YSqlServerCommand -SqlServerName $script:sqlServerName `
+        $result = Invoke-YMSSqlCommand -SqlServerName $script:sqlServerName `
                                            -DatabaseName 'master' `
                                            -Text 'select suser_name()' `
                                            -Credential (Get-YTUserCredential) `
@@ -172,9 +172,9 @@ Describe 'Invoke-YSqlServerCommand' {
     }
 
     It 'can use someone else''s connection' {
-        Invoke-YSqlServerCommand -Connection $script:masterConn -Text 'select db_name()' -AsScalar | Should -Be 'master'
+        Invoke-YMSSqlCommand -Connection $script:masterConn -Text 'select db_name()' -AsScalar | Should -Be 'master'
         # Run twice to make sure our connection isn't closed/disposed.
-        Invoke-YSqlServerCommand -Connection $script:masterConn -Text 'select db_name()' -AsScalar | Should -Be 'master'
+        Invoke-YMSSqlCommand -Connection $script:masterConn -Text 'select db_name()' -AsScalar | Should -Be 'master'
         $Global:Error | Should -BeNullOrEmpty
     }
 }
