@@ -9,8 +9,16 @@ Build:
     Prerelease:
     - prerelease: alpha.$(WHISKEY_BUILD_NUMBER)
 
+- CopyFile:
+    Path:
+    - CHANGELOG.md
+    - README.md
+    - LICENSE
+    - NOTICE
+    DestinationPath: Yodel
+
 # Dot-sourcing files is expensive. Move all functions into your .psm1 file to
-# improve import speed. Do this before testing to ensure your module still 
+# improve import speed. Do this before testing to ensure your module still
 # works.
 - MergeFile:
     OnlyBy: BuildServer
@@ -30,15 +38,15 @@ Build:
     Path: Tests\Server.txt
     Content: '.'
 
-- Pester4:
-    Script: Tests\*.Tests.ps1
-
 - Zip:
     ArchivePath: .output\Yodel.zip
     Path:
     - Yodel
     Exclude:
     - "*.orig"
+
+- Pester4:
+    Script: Tests\*.Tests.ps1
 
 Publish:
 - PublishPowerShellModule:
