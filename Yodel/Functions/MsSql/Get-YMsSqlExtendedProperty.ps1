@@ -25,10 +25,27 @@ function Get-YMsSqlExtendedProperty
 
     To use `default` as the value for any of the `fn_listextendedproperty` level or name parameters, pass
     `[Yodel_MsSql_QueryKeyword]::Default`.
+
+    .EXAMPLE
+    Get-YMsSqlExtendedProperty -Connection $conn -SchemaName 'yodel'
+
+    Demonstrates how to get a schema's extended properties by passing the schema name to the `SchemaName` parameter.
+
+    .EXAMPLE
+    Get-YMsSqlExtendedProperty -Connection $conn -SchemaName 'yodel' -TableName 'Table_1'
+
+    Demonstrates how to get a table's extended properties by passing the table name to the `TableName` parameter and the
+    table's schema to the `SchemaName` parameter.
+
+    .EXAMPLE
+    Get-YMsSqlExtendedProperty -Connection $conn -SchemaName 'yodel' -TableName 'Table_1' -ColumnName 'id
+
+    Demonstrates how to get a table column's extended properties by passing the column name to the `ColumnName`
+    parameter and the columns's table to the `TableName` parameter and the table's schema to the `SchemaName` parameter.
     #>
     [CmdletBinding(DefaultParameterSetName='Raw')]
     param(
-        # The connection to the Microsoft SQL SErver to use.
+        # The connection to Microsoft SQL Server.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 

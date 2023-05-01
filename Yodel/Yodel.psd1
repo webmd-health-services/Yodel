@@ -75,6 +75,7 @@
                             'Initialize-YMsSqlSchema',
                             'Invoke-YMsSqlCommand',
                             'Invoke-YSqlServerCommand',
+                            'Remove-YMsSqlTable',
                             'Set-YMsSqlExtendedProperty',
                             'Test-YMsSqlExtendedProperty',
                             'Test-YMsSqlSchema',

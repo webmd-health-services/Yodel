@@ -162,7 +162,7 @@ Describe 'Invoke-YMsSqlCommand' {
     }
 
     It 'can login with a credential' {
-        $credential = GivenTestUser -SqlServerName $script:sqlServerName
+        $credential = GivenMsSqlTestUser -SqlServerName $script:sqlServerName
         $result = Invoke-YMsSqlCommand -SqlServerName $script:sqlServerName `
                                            -DatabaseName 'master' `
                                            -Text 'select suser_name()' `

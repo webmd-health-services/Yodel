@@ -18,9 +18,11 @@ function Get-YMsSqlSchema
     #>
     [CmdletBinding()]
     param(
+        # The connection to Microsoft SQL Server.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 
+        # The schema name.
         [Parameter(Mandatory)]
         [String] $Name
     )

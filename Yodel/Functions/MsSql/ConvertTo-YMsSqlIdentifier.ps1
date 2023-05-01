@@ -20,7 +20,7 @@ function ConvertTo-YMsSqlIdentifier
     #>
     [CmdletBinding()]
     param(
-        # The connection to use to run the `quotename` query.
+        # The connection to Microsoft SQL Server.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 

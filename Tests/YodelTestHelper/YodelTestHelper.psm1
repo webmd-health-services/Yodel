@@ -45,7 +45,7 @@ function GivenMSSqlExtendedProperty
     $setArgs = @{
         Connection = Get-YTMSSqlConnection;
         Name = $Named;
-        Value = $WithValue
+        Value = $WithValue;
     }
 
     if ($OnSchema)
