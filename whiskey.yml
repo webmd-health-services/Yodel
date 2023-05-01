@@ -59,14 +59,12 @@ Build:
             - "*\\Connect-YDatabase.Tests.ps1"
             - "*\\Import-Yodel.Tests.ps1"
             - "*\\Invoke-YDbCommand.Tests.ps1"
-            - "*\\Yodel.Tests.ps1"
 
 - Pester4:
     Script:
     - Tests\Connect-YDatabase.Tests.ps1
     - Tests\Import-Yodel.Tests.ps1
     - Tests\Invoke-YDbCommand.Tests.ps1
-    - Tests\Yodel.Tests.ps1
 
 Publish:
 - PublishPowerShellModule:
