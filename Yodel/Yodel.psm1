@@ -19,7 +19,7 @@ $moduleRoot = $PSScriptRoot
 # functions that are in their own files.
 $functionsPath = & {
     Join-Path -Path $moduleRoot -ChildPath 'Functions\*.ps1'
-    Join-Path -Path $moduleRoot -ChildPath 'Functions\MSSql\*.ps1'
+    Join-Path -Path $moduleRoot -ChildPath 'Functions\MsSql\*.ps1'
 }
 if( (Test-Path -Path $functionsPath) )
 {
