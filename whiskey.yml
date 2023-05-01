@@ -54,7 +54,7 @@ Build:
         Output:
             Verbosity: Detailed
         Run:
-            Path: Test\*.Tests.ps1
+            Path: Tests\*.Tests.ps1
             ExcludePath:
             - "*\\Connect-YDatabase.Tests.ps1"
             - "*\\Import-Yodel.Tests.ps1"
@@ -63,10 +63,10 @@ Build:
 
 - Pester4:
     Script:
-    - Test\Connect-YDatabase.Tests.ps1
-    - Test\Import-Yodel.Tests.ps1
-    - Test\Invoke-YDbCommand.Tests.ps1
-    - Test\Yodel.Tests.ps1
+    - Tests\Connect-YDatabase.Tests.ps1
+    - Tests\Import-Yodel.Tests.ps1
+    - Tests\Invoke-YDbCommand.Tests.ps1
+    - Tests\Yodel.Tests.ps1
 
 Publish:
 - PublishPowerShellModule:
