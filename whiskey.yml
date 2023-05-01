@@ -13,9 +13,9 @@ Build:
     Path:
     - CHANGELOG.md
     - README.md
-    - LICENSE
-    - NOTICE
-    DestinationPath: Yodel
+    - LICENSE.txt
+    - NOTICE.txt
+    DestinationDirectory: Yodel
 
 # Dot-sourcing files is expensive. Move all functions into your .psm1 file to
 # improve import speed. Do this before testing to ensure your module still
