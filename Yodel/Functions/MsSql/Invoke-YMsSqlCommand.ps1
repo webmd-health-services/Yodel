@@ -229,6 +229,16 @@ function Invoke-YMsSqlCommand
 
 function Invoke-YSqlServerCommand
 {
+    <#
+    .SYNOPSIS
+    ***OBSOLETE.*** Use `Invoke-YMsSqlCommand` instead.
+
+    .DESCRIPTION
+    ***OBSOLETE.*** Use `Invoke-YMsSqlCommand` instead.
+
+    .EXAMPLE
+    ***OBSOLETE.*** Use `Invoke-YMsSqlCommand` instead.
+    #>
     [CmdletBinding(DefaultParameterSetName='ExecuteReader')]
     param(
         [Data.Common.DbConnection] $Connection,

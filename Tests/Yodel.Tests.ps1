@@ -51,17 +51,20 @@ BeforeAll {
 
         if( $HasSynopsis )
         {
-            $help.Synopsis | Should -Not -BeNullOrEmpty
+            $help | Get-Member -Name 'Synopsis' | Should -Not -BeNullOrEmpty -Because $Named
+            $help.Synopsis | Should -Not -BeNullOrEmpty -Because $Named
         }
 
         if( $HasDescription )
         {
-            $help.Description | Should -Not -BeNullOrEmpty
+            $help | Get-Member -Name 'Description' | Should -Not -BeNullOrEmpty -Because $Named
+            $help.Description | Should -Not -BeNullOrEmpty -Because $Named
         }
 
         if( $HasExamples )
         {
-            $help.Examples | Should -Not -BeNullOrEmpty
+            $help | Get-Member -Name 'Examples' | Should -Not -BeNullOrEmpty -Because $Named
+            $help.Examples | Should -Not -BeNullOrEmpty -Because $Named
         }
     }
 }
