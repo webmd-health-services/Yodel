@@ -11,14 +11,14 @@ LONG DESCRIPTION
 
     ## SQL Server
 
-    The simplest command to use is `Invoke-YMSSqlCommand`. It connects to a
+    The simplest command to use is `Invoke-YMsSqlCommand`. It connects to a
     SQL Server instance and database, runs a query, and closes the connection.
     Pass the name of the SQL Server instance to the `SqlServerName` parameter
     (`.` or the machine name for the default instance, `HOSTNAME\INSTANCE` for a
     named instance), the name of the database to the `Database` parameter, and
     the query to the `Text` parameter:
 
-        > Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1 First, 2, 3'
+        > Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1 First, 2, 3'
 
         First Column0 Column1
         ----- ------- -------
@@ -30,13 +30,13 @@ LONG DESCRIPTION
 
     If you have a query that returns a single value, use the `-AsScalar` switch:
 
-        > Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
+        > Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
         1
 
     If your query doesn't return any results, use the `-NonQuery` switch. It
     will return the number of rows inserted/deleted (if any).
 
-        > Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into example (id) values (1),(2),(3),(4)'
+        > Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into example (id) values (1),(2),(3),(4)'
         4
 
     ## Querying Other Databases
@@ -92,4 +92,4 @@ LINKS
 SEE ALSO
     Connect-YDatabase
     Invoke-YDbCommand
-    Invoke-YMSSqlCommand
+    Invoke-YMsSqlCommand

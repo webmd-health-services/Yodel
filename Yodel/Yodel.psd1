@@ -65,7 +65,20 @@
     FunctionsToExport = @(
                             'Connect-YDatabase',
                             'Invoke-YDbCommand',
-                            'Invoke-YSqlServerCommand'
+
+                            # Microsoft SQL Server functions
+                            'ConvertTo-YMsSqlIdentifier',
+                            'Get-YMsSqlExtendedProperty',
+                            'Get-YMsSqlSchema',
+                            'Get-YMsSqlTable',
+                            'Initialize-YMsSqlDatabase',
+                            'Initialize-YMsSqlSchema',
+                            'Invoke-YMsSqlCommand',
+                            'Invoke-YSqlServerCommand',
+                            'Set-YMsSqlExtendedProperty',
+                            'Test-YMsSqlExtendedProperty',
+                            'Test-YMsSqlSchema',
+                            'Test-YMsSqlTable'
                          )
 
     # Cmdlets to export from this module. By default, you get a script module, so there are no cmdlets.

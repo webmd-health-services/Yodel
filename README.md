@@ -32,10 +32,10 @@ Save-Module -Name 'Yodel' -Path '.'
 
 ## SQL Server
 
-The simplest command to use is `Invoke-YMSSqlCommand`. It connects to a SQL Server instance and database, runs a query, and closes the connection. Pass the name of the SQL Server instance to the `SqlServerName` parameter (`.` or the machine name for the default instance, `HOSTNAME\INSTANCE` for a named instance), the name of the database to the `Database` parameter, and the query to the `Text` parameter:
+The simplest command to use is `Invoke-YMsSqlCommand`. It connects to a SQL Server instance and database, runs a query, and closes the connection. Pass the name of the SQL Server instance to the `SqlServerName` parameter (`.` or the machine name for the default instance, `HOSTNAME\INSTANCE` for a named instance), the name of the database to the `Database` parameter, and the query to the `Text` parameter:
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1 First, 2, 3'
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1 First, 2, 3'
 
 First Column0 Column1
 ----- ------- -------
@@ -47,14 +47,14 @@ You'll get an object back for each row returned. Each object will have propertie
 If you have a query that returns a single value, use the `-AsScalar` switch:
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
 1
 ```
 
 If your query doesn't return any results, use the `-NonQuery` switch. It will return the number of rows inserted/deleted (if any).
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into example (id) values (1),(2),(3),(4)'
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into example (id) values (1),(2),(3),(4)'
 4
 ```
 
@@ -102,10 +102,10 @@ finally
 
 ## SQL Server: Read Rows
 
-The fastest way to query a SQL Server database is to use the `Invoke-YMSSqlCommand` function:
+The fastest way to query a SQL Server database is to use the `Invoke-YMsSqlCommand` function:
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select * from sys.object'
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select * from sys.object'
 
 type principal_id is_published name                                         type_desc            schema_id is_ms_shipped parent_object_id is_schema_published modify_date
 ---- ------------ ------------ ----                                         ---------            --------- ------------- ---------------- ------------------- -----------
@@ -116,32 +116,32 @@ S                        False sysallocunits                                SYST
 S                        False sysfiles1                                    SYSTEM_TABLE                 4          True                0               False 4/8/2003 9:13:37 AM
 ```
 
-The above example will connect to the master database in the local, default intance of SQL Server as the current user, and run the query `select * from sys.object` using integrated authentication. You'll get back an object for each row returned. Each object will have properties that match the column names in the result set. (If a column is missing a name, `Invoke-YMSSqlCommand` will create a generic `ColumnX` name for you, where `X` is number that increments for each nameless column.)
+The above example will connect to the master database in the local, default intance of SQL Server as the current user, and run the query `select * from sys.object` using integrated authentication. You'll get back an object for each row returned. Each object will have properties that match the column names in the result set. (If a column is missing a name, `Invoke-YMsSqlCommand` will create a generic `ColumnX` name for you, where `X` is number that increments for each nameless column.)
 
 ## SQL Server: Run a Query That Returns a Single/Scalar Value
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select 1' -AsScalar
 1
 ```
 
 ## SQL Server: Run a Query That Returns No Results
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'tempdb' -Text 'create table yodel (id int)' -NonQuery
-> Invoke-YMSSqlCommand -SqlServerName '.' `
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'tempdb' -Text 'create table yodel (id int)' -NonQuery
+> Invoke-YMsSqlCommand -SqlServerName '.' `
                            -DatabaseName 'tempdb' `
                            -Text 'insert into yodel (id) values (1),(2)' `
                            -NonQuery
 2
-> Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'tempdb' -Text 'delete from yodel' -NonQuery
+> Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'tempdb' -Text 'delete from yodel' -NonQuery
 2
 ```
 
 ## SQL Server: Parameterized Queries
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' `
+> Invoke-YMsSqlCommand -SqlServerName '.' `
                            -DatabaseName 'master' `
                            -Text 'select * from sys.system_views where name = @name' `
                            -Parameter @{ '@name' = 'views' }
@@ -155,7 +155,7 @@ has_unchecked_assembly_data is_tracked_by_cdc is_published modify_date          
 ## SQL Server: Add Properties to Connection String
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' `
+> Invoke-YMsSqlCommand -SqlServerName '.' `
                            -DatabaseName 'master' `
                            -ConnectionString 'Application Name=Yodel' `
                            -Text 'select APP_NAME()' `
@@ -166,7 +166,7 @@ Yodel
 ## SQL Server: Change Query Timeout
 
 ```powershell
-> Invoke-YMSSqlCommand -SqlServerName '.' `
+> Invoke-YMsSqlCommand -SqlServerName '.' `
                            -DatabaseName 'master' `
                            -Text 'select 1' `
                            -Timeout 120
@@ -175,7 +175,7 @@ Yodel
 ## SQL Server: Execute a Stored Procedure
 
 ```powershell
-Invoke-YMSSqlCommand -SqlServerName '.' `
+Invoke-YMsSqlCommand -SqlServerName '.' `
                          -DatabaseName 'master' `
                          -Text 'sp_addrolemember' `
                          -CommandType [Data.CommandType]::StoredProcedure `
@@ -186,7 +186,7 @@ Invoke-YMSSqlCommand -SqlServerName '.' `
 
 ```powershell
 $credential = Get-Credential
-$username = Invoke-YMSSqlCommand -SqlServerName '.' `
+$username = Invoke-YMsSqlCommand -SqlServerName '.' `
                                      -DatabaseName 'master' `
                                      -Credential $credential `
                                      -Text 'select suser_name()' `
@@ -402,7 +402,7 @@ Detailed documentation is available via PowerShell's help system. Import the mod
 ```powershell
 Import-Module Yodel
 
-> Get-Help Invoke-YMSSqlCommand
+> Get-Help Invoke-YMsSqlCommand
 > Get-Help Connect-YDatabase
 > Get-Help Invoke-YDbCommand
 ```

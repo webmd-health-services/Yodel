@@ -1,17 +1,17 @@
 
-function Invoke-YMSSqlCommand
+function Invoke-YMsSqlCommand
 {
     <#
     .SYNOPSIS
     Uses ADO.NET to execute a query in a SQL Server database.
 
     .DESCRIPTION
-    `Invoke-YMSSqlCommand` executes a SQL query against a SQL Server database. The function opens a connection to SQL
+    `Invoke-YMsSqlCommand` executes a SQL query against a SQL Server database. The function opens a connection to SQL
     Server, executes the query, then closes the connection. Pass the name of the SQL Server (hostname and instance name)
     to the `SqlServerName` parameter. Pass the database name to the `DatabaseName` parameter.  By default, the query is
     run as the current user. To run as a custom user, pass the user's credentials to the `Credential` parameter.
 
-    Pass the query to run to the `Text` parameter. You may also pipe queries to `Invoke-YMSSqlCommand`. Piped queries
+    Pass the query to run to the `Text` parameter. You may also pipe queries to `Invoke-YMsSqlCommand`. Piped queries
     are all run using the same connection.
 
     The function returns a generic object for each row in the result set. Each object has a property for each column. If
@@ -36,7 +36,7 @@ function Invoke-YMSSqlCommand
     Query timings are output to the verbose stream, including the text of the query. If you want to suppress sensitive
     queries from being output, set the `Verbose` parameter to `$false`, e.g. `-Verbose:$false`.
 
-    The `Invoke-YMSSqlCommand` function constructs a connection string for you based on the values of the
+    The `Invoke-YMsSqlCommand` function constructs a connection string for you based on the values of the
     `SqlServerName` and `DatabaseName` parameters. If you have custom properties you'd like added to the connection
     string, pass them to the `ConnectionString` parameter.
 
@@ -44,46 +44,46 @@ function Invoke-YMSSqlCommand
     `ErrorAction` parameter to `Stop`, e.g. `-ErrorAction Stop`.
 
     .EXAMPLE
-    Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select * from MyTable'
+    Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select * from MyTable'
 
     Demonstrates how to select rows from a table.
 
     .EXAMPLE
-    'select 1','select 2' | Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master'
+    'select 1','select 2' | Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master'
 
-    Demonstrates that you can pipe commands to `Invoke-YMSSqlCommand`. All queries piped to `Invoke-YMSSqlCommand` are
+    Demonstrates that you can pipe commands to `Invoke-YMsSqlCommand`. All queries piped to `Invoke-YMsSqlCommand` are
     run using the same connection.
 
     .EXAMPLE
-    Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select count(*) from MyTable' -AsScalar
+    Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select count(*) from MyTable' -AsScalar
 
     Demonstrates how to return a scalar value.  If the command returns multiple rows/columns, returns the first row's
     first column's value.
 
     .EXAMPLE
-    $rowsDeleted = Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'delete from dbo.Example' -NonQuery
+    $rowsDeleted = Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'delete from dbo.Example' -NonQuery
 
     Demonstrates how to execute a command that doesn't return a value.  If your command updates/deletes rows, the number
     of rows affected is returned.
 
     .EXAMPLE
-    Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into MyTable (Two,Three) values @Column2, @Column3' -Parameter @{ '@Column2' = 'Value2'; '@Column3' = 'Value3' } -NonQuery
+    Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'insert into MyTable (Two,Three) values @Column2, @Column3' -Parameter @{ '@Column2' = 'Value2'; '@Column3' = 'Value3' } -NonQuery
 
     Demonstrates how to use parameterized queries.
 
     .EXAMPLE
-    Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'sp_addrolemember' -CommandType [Data.CommandType]::StoredProcedure -Parameter @{ '@rolename' = 'db_owner'; '@membername' = 'myuser'; }
+    Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'sp_addrolemember' -CommandType [Data.CommandType]::StoredProcedure -Parameter @{ '@rolename' = 'db_owner'; '@membername' = 'myuser'; }
 
     Demonstrates how to execute a stored procedure, including how to pass its parameters using the `Parameter`
     parameter.
 
     .EXAMPLE
-    Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'create login [yodeltest] with password ''P@$$w0rd''' -Verbose:$false
+    Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'create login [yodeltest] with password ''P@$$w0rd''' -Verbose:$false
 
     Demonstrates how to prevent command timings for sensitive queries from being written to the verbose stream.
 
     .EXAMPLE
-    Invoke-YMSSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select * from a_really_involved_join_that_takes_a_long_time' -Timeout 120
+    Invoke-YMsSqlCommand -SqlServerName '.' -DatabaseName 'master' -Text 'select * from a_really_involved_join_that_takes_a_long_time' -Timeout 120
 
     Demonstrates how to set the command timeout for commands that take longer than .NET's default timeout (30 seconds).
     #>
@@ -262,10 +262,10 @@ function Invoke-YSqlServerCommand
 
     process
     {
-        $msg = 'Invoke-YMSSqlCommand is obsolete and will be removed in the next major version of Yodel. Please use ' +
-            'Invoke-YMSSqlCommand instead.'
+        $msg = 'Invoke-YMsSqlCommand is obsolete and will be removed in the next major version of Yodel. Please use ' +
+            'Invoke-YMsSqlCommand instead.'
         Write-Warning -Message $msg
 
-        Invoke-YMSSqlCommand @PSBoundParameters
+        Invoke-YMsSqlCommand @PSBoundParameters
     }
 }

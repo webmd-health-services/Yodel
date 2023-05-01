@@ -8,17 +8,24 @@
 
 ### Added
 
-* `Connection` parameter to `Invoke-YSqlServerCommand`.
+Functions specific to Microsoft SQL Server:
 
-### Changed
-
-* The `Invoke-YSqlServerCommand` was renamed to `Invoke-MSSqlCommand`. Please update usages. The old name remains, but
-you'll get a warning if you use it.
+* `ConvertTo-YMsSqlIdentifier` for converting a string to an identifer, quoted with square brackets.
+* `Get-YMsSqlExtendedProperty` for getting extended properties.
+* `Get-YMsSqlSchema` for getting metadata about a schema.
+* `Get-YMsSqlTable` for getting metadata about a table.
+* `Initialize-YMsSqlDatabase` for creating a database.
+* `Initialze-YMsSqlSchema` for creating a schema.
+* `Invoke-YMsSqlCommand` for running queries and commands.
+* `Remove-YMsSqlTable` for dropping a table.
+* `Set-YMsSqlExtendedProperty` for adding/updating extended properties.
+* `Test-YMsSqlExtendedProperty` for testing if an extended property exists.
+* `Test-YMsSqlSchema` for testing if a schema exists.
+* `Test-YMsSqlTable` for testing if a table exists.
 
 ### Deprecated
 
-* The `Invoke-YSqlServerCommand` function. Replace with `Invoke-MSSqlCommand`. Functionality not affectd, just the
-name.
+* The `Invoke-YSqlServerCommand` function. Replaced with `Invoke-YMsSqlCommand`.
 
 
 ## 1.0.0
