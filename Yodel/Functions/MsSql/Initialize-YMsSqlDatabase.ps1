@@ -3,12 +3,13 @@ function Initialize-YMsSqlDatabase
 {
     <#
     .SYNOPSIS
-    Esnures a Microsoft SQL Server database exists.
+    Ensures a Microsoft SQL Server database exists.
 
     .DESCRIPTION
     The `Initialize-YMsSqlDatabase` function creates a database in Microsoft SQL Server if it doesn't already exist.
     Pass the connection to SQL Server to the `Connection` parameter and the name of the database to the `Name`
-    parameter. If the database doesn't exist (i.e. there's no record for it in `sys.databases`), it is created.
+    parameter. If the database doesn't exist (i.e. there's no record for it in `sys.databases`), it is created. If the
+    function completes without writing or throwing an error, the database will exist.
 
     .EXAMPLE
     Initialize-YMsSqlDatabase -Connection $conn -Name 'Yodel'
