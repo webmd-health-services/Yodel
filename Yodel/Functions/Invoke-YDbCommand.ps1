@@ -101,18 +101,18 @@ function Invoke-YDbCommand
         # The time (in seconds) to wait for a command to execute. The default is the .NET default, which is 30 seconds.
         [int] $Timeout,
 
-        [Parameter(Position=2)]
         # Any parameters used in the command.
+        [Parameter(Position=2)]
         [hashtable] $Parameter,
 
-        [Parameter(Mandatory,ParameterSetName='ExecuteScalar')]
         # Return the result as a single value instead of a row.  If the command returns multiple rows/columns, the value
         # of the first row's first column is returned.
+        [Parameter(Mandatory,ParameterSetName='ExecuteScalar')]
         [switch] $AsScalar,
 
-        [Parameter(Mandatory,ParameterSetName='ExecuteNonQuery')]
         # Executes a command that doesn't return any records.  For updates/deletes, the number of rows affected will be
         # returned unless the NOCOUNT options is used.
+        [Parameter(Mandatory,ParameterSetName='ExecuteNonQuery')]
         [switch] $NonQuery,
 
         # Any transaction the command should be part of.
