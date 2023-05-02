@@ -17,17 +17,10 @@ enum Yodel_MsSql_QueryKeyword
 # this file, so only dot-source files that exist on the file system. This allows
 # developers to work on a module without having to build it first. Grab all the
 # functions that are in their own files.
-$functionsPath = & {
-    Join-Path -Path $script:moduleRoot -ChildPath 'Functions\*.ps1'
-    Join-Path -Path $script:moduleRoot -ChildPath 'Functions\MsSql\*.ps1'
-}
-foreach( $functionPath in (Get-Item $functionsPath) )
-{
-    if ( -not (Test-Path -Path $functionPath))
-    {
-        continue
-    }
-
-
-    . (Get-Item -Path $functionPath).FullName
-}
+& {
+        Join-Path -Path $script:moduleRoot -ChildPath 'Functions'
+        Join-Path -Path $script:moduleRoot -ChildPath 'Functions\MsSql'
+    } |
+    Where-Object { Test-Path -Path $_ } |
+    Get-ChildItem -Filter '*.ps1' |
+    ForEach-Object { . $_.FullName }
