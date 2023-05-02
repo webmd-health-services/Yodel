@@ -69,17 +69,17 @@ function Connect-YDatabase
     [CmdletBinding()]
     [OutputType([Data.Common.DbConnection])]
     param(
-        [Parameter(Mandatory,ParameterSetName='SqlServer')]
+        [Parameter(Mandatory, ParameterSetName='SqlServer')]
         [String]$SqlServerName,
 
-        [Parameter(Mandatory,ParameterSetName='SqlServer')]
+        [Parameter(Mandatory, ParameterSetName='SqlServer')]
         [String]$DatabaseName,
 
         [Parameter(ParameterSetName='SqlServer')]
         [pscredential]$Credential,
 
-        [Parameter(Mandatory,ParameterSetName='Generic')]
-        [Data.Common.DbProviderFactory]$Provider,
+        [Parameter(Mandatory, ParameterSetName='Generic')]
+        [Data.Common.DbProviderFactory] $Provider,
 
         # The connection string to use.
         [String]$ConnectionString,
@@ -102,7 +102,7 @@ function Connect-YDatabase
 
     $connection = $Provider.CreateConnection()
     $connStringBuilder = $Provider.CreateConnectionStringBuilder()
-    
+
     if( $ConnectionString )
     {
         # There's some weird PowerShell magic going on when setting the ConnectionString property, so directly call the setter function.
