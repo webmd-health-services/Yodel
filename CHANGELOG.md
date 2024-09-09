@@ -21,6 +21,7 @@ Functions specific to Microsoft SQL Server:
 * `Test-YMsSqlExtendedProperty` for testing if an extended property exists.
 * `Test-YMsSqlSchema` for testing if a schema exists.
 * `Test-YMsSqlTable` for testing if a table exists.
+* `Test-YMsSqlTableColumn` for testing if a table column exists.
 
 ### Deprecated
 
