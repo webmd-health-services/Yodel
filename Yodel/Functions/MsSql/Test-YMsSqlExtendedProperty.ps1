@@ -48,7 +48,8 @@ function Test-YMsSqlExtendedProperty
     #>
     [CmdletBinding(DefaultParameterSetName='Raw')]
     param(
-        # The connection to Microsoft SQL Server.
+        # The connection to Microsoft SQL Server. Use `Connect-YDatabase` to create a connection, or pass any ADO.NET
+        # connection object.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 
@@ -59,13 +60,13 @@ function Test-YMsSqlExtendedProperty
         [Parameter(ParameterSetName='ForTableColumn')]
         [String] $SchemaName,
 
-        # The table name whose extended property to set, or the table name of the column whose extended property to
-        # set.
+        # The table name whose extended property to test, or the table name of the column whose extended property to
+        # test.
         [Parameter(Mandatory, ParameterSetName='ForTable')]
         [Parameter(Mandatory, ParameterSetName='ForTableColumn')]
         [String] $TableName,
 
-        # The column name whose extended property to set.
+        # The column name whose extended property to test.
         [Parameter(Mandatory, ParameterSetName='ForTableColumn')]
         [String] $ColumnName,
 

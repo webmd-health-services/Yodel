@@ -16,11 +16,15 @@ function Test-YMsSqlTable
     Demonstrates how to test if a table exists by passing the table name to the `Name` parameter.
     #>    [CmdletBinding()]
     param(
+        # The connection to Microsoft SQL Server. Use `Connect-YDatabase` to create a connection, or pass any ADO.NET
+        # connection object.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 
+        # The schema name of the table whose existence to test. The default is `dbo`.
         [String] $SchemaName = 'dbo',
 
+        # The name of the table whose existence to test.
         [Parameter(Mandatory)]
         [String] $Name,
 

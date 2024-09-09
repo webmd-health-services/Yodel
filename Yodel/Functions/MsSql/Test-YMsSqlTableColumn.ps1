@@ -7,7 +7,7 @@ function Test-YMsSqlTableColumn
 
     .DESCRIPTION
     The `Test-YMsSqlTableColumn` function tests if a column exists on a table in SQL Server. Pass the connection to SQL
-    Server to the `Connection` parameter, the table name to the `TabkeName` parameter, and the column name to the
+    Server to the `Connection` parameter, the table name to the `TableName` parameter, and the column name to the
     `ColumnName` parameter. Returns `$true` if the column exists, and `$false` otherwise.
 
     If the table is in a custom
@@ -21,14 +21,18 @@ function Test-YMsSqlTableColumn
     #>
     [CmdletBinding()]
     param(
+        # The database connection. Use `Connect-YDatabase` to create a connection.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 
+        # The table's schema name. The default is `dbo`.
         [String] $SchemaName = 'dbo',
 
+        # The name of the table whose columns to test.
         [Parameter(Mandatory)]
         [String] $TableName,
 
+        # The name of the column whose existence to test.
         [Parameter(Mandatory)]
         [String] $Name,
 

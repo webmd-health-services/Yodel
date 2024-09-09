@@ -26,7 +26,8 @@ function Get-YMsSqlTableColumn
     #>
     [CmdletBinding()]
     param(
-        # The connection to Microsoft SQL Server.
+        # The connection to Microsoft SQL Server. Use `Connect-YDatabase` to create a connection, or pass any ADO.NET
+        # connection object.
         [Parameter(Mandatory)]
         [Data.Common.DbConnection] $Connection,
 
@@ -37,6 +38,7 @@ function Get-YMsSqlTableColumn
         [Parameter(Mandatory)]
         [String] $TableName,
 
+        # The name of the column to get. By default, all of the table's columns are returned.
         [String] $Name
     )
 
