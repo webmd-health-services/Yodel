@@ -16,6 +16,7 @@ Build:
     - main: ""
     - master: ""
     - "*": rc1
+    IncrementPrereleaseVersion: true
 
 # Update the AppVeyor build/version number.
 - Exec:
