@@ -8,7 +8,7 @@ function Test-YMsSqlTable
     .DESCRIPTION
     The `Test-YMsSqlTable` function tests if a table exists in SQL Server. Pass the connection to SQL Server to the
     `Connection` parameter and the table name to the `Name` parameter. Returns `$true` if the table exists, and `$false
-    otherwise.
+    otherwise. Use the `PassThru` switch to return the table metadata instead of `$true`.
 
     .EXAMPLE
     Test-YMsSqlTable -Connection $conn -Name 'yodel'
@@ -22,7 +22,10 @@ function Test-YMsSqlTable
         [String] $SchemaName = 'dbo',
 
         [Parameter(Mandatory)]
-        [String] $Name
+        [String] $Name,
+
+        # Return the table metadata instead of `$true` if the table exists.
+        [switch] $PassThru
     )
 
     Set-StrictMode -Version 'Latest'
@@ -33,5 +36,11 @@ function Test-YMsSqlTable
     {
         return $false
     }
+
+    if ($PassThru)
+    {
+        return $table
+    }
+
     return $true
 }

@@ -8,7 +8,7 @@ function Test-YMsSqlSchema
     .DESCRIPTION
     The `Test-YMsSqlSchema` function tests if a schema exists in SQL Server. Pass the connection to SQL Server to the
     `Connection` parameter and the schema name to the `Name` parameter. Returns `$true` if the schema exists, and
-    `$false otherwise.
+    `$false otherwise. Use the `PassThru` switch to return the schema metadata instead of `$true`.
 
     .EXAMPLE
     Test-YMsSqlSchema -Connection $conn -Name 'yodel'
@@ -23,7 +23,10 @@ function Test-YMsSqlSchema
 
         # The schema name.
         [Parameter(Mandatory)]
-        [String] $Name
+        [String] $Name,
+
+        # Return schema metadata instead of `$true` if the schema exists.
+        [switch] $PassThru
     )
 
     Set-StrictMode -Version 'Latest'
@@ -34,5 +37,11 @@ function Test-YMsSqlSchema
     {
         return $false
     }
+
+    if ($PassThru)
+    {
+        return $schema
+    }
+
     return $true
 }

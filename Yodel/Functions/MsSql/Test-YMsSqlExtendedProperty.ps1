@@ -24,6 +24,9 @@ function Test-YMsSqlExtendedProperty
     To test for the existence of an extended property for a column on a table, pass the column's name, table name, and
     table's schema name to the `ColumnName`, `TableName`, and `SchemaName` parameters, respectively.
 
+    Returns `$true` if the exteneded property exists. Otherwise, returns `$false`. Use the `PassThru` switch to return
+    the property metadata instead of `$true`.
+
     .EXAMPLE
     Test-YMsSqlExtendedProperty -Connection $conn -SchemaName 'yodel' -Name 'Yodel_Example'
 
@@ -110,17 +113,28 @@ function Test-YMsSqlExtendedProperty
         # `[Yodel_MsSql_QueryKeyword]::Default` to pass `default` as the value.
         [Parameter(Mandatory, ParameterSetName='RawL2')]
         [AllowNull()]
-        [Object] $Level2Name
+        [Object] $Level2Name,
+
+        # Return extended property metadata instead of `$true` if the property exists.
+        [switch] $PassThru
     )
 
     Set-StrictMode -Version 'Latest'
     Use-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
 
-    $PSBoundParameters['ErrorAction'] = [Management.Automation.ActionPreference]::Ignore
-    if (Get-YMsSqlExtendedProperty @PSBoundParameters)
+    $getArgs = $PSBoundParameters
+    [void]$getArgs.Remove('PassThru')
+
+    $property = Get-YMsSqlExtendedProperty @getArgs -ErrorAction Ignore
+    if (-not $property)
     {
-        return $true
+        return $false
     }
 
-    return $false
+    if ($PassThru)
+    {
+        return $property
+    }
+
+    return $true
 }

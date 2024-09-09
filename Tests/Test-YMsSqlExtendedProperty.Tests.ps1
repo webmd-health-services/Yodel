@@ -105,4 +105,16 @@ Describe 'Test-YMsSqlExtendedProperty' {
         $result | Should -BeOfType ([bool])
         $Global:Error | Should -BeNullOrEmpty
     }
+
+    It 'passes through metadata' {
+        $schemaName = 'test-ymssqlextendedproperty'
+        $propName = 'Yodel_Test-YMsSqlExtendedProperty_Test10'
+        GivenMSSqlSchema $schemaName
+        GivenMSSqlExtendedProperty $propName -WithValue 'from test 10' -OnSchema $schemaName
+        $prop = Test-YMsSqlExtendedProperty @connArg -SchemaName $schemaName -Name $propName -PassThru
+        $prop | Should -Not -BeNullOrEmpty
+        $prop | Should -Not -BeOfType ([bool])
+        $prop.name | Should -Be $propName
+        $prop.value | Should -Be 'from test 10'
+    }
 }
