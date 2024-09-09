@@ -80,19 +80,31 @@ function GivenMSSqlTable
 {
     [CmdletBinding()]
     param(
+        [Parameter(Position=0)]
         [String] $Named,
 
+        [String] $InSchema,
+
+        [Parameter(Position=1)]
         [String[]] $Column
     )
 
-    $conn = Get-YTMSSqlConnection
-    if ((Test-YMsSqlTable -Connection $conn -Name $Named))
+    $schemaArg = @{}
+    $schemaNamePart = ''
+    if ($InSchema)
     {
-        Remove-YMsSqlTable -Connection $conn -Name $Named
+        $schemaArg['SchemaName'] = $InSchema
+        $schemaNamePart = "[${InSchema}]."
+    }
+
+    $conn = Get-YTMSSqlConnection
+    if ((Test-YMsSqlTable -Connection $conn -Name $Named @schemaArg))
+    {
+        Remove-YMsSqlTable -Connection $conn -Name $Named @schemaArg
     }
 
     $ddl = @"
-create table [${Named}] (
+create table ${schemaNamePart}[${Named}] (
     $($Column -join ", $([Environment]::NewLine)    ")
 )
 "@

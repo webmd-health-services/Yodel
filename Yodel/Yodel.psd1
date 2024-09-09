@@ -71,6 +71,7 @@
                             'Get-YMsSqlExtendedProperty',
                             'Get-YMsSqlSchema',
                             'Get-YMsSqlTable',
+                            'Get-YMsSqlTableColumn',
                             'Initialize-YMsSqlDatabase',
                             'Initialize-YMsSqlSchema',
                             'Invoke-YMsSqlCommand',
@@ -79,7 +80,8 @@
                             'Set-YMsSqlExtendedProperty',
                             'Test-YMsSqlExtendedProperty',
                             'Test-YMsSqlSchema',
-                            'Test-YMsSqlTable'
+                            'Test-YMsSqlTable',
+                            'Test-YMsSqlTableColumn'
                          )
 
     # Cmdlets to export from this module. By default, you get a script module, so there are no cmdlets.

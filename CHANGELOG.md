@@ -4,8 +4,6 @@
 
 ## 1.1.0
 
-> Released 1 May 2023
-
 ### Added
 
 Functions specific to Microsoft SQL Server:
@@ -14,6 +12,7 @@ Functions specific to Microsoft SQL Server:
 * `Get-YMsSqlExtendedProperty` for getting extended properties.
 * `Get-YMsSqlSchema` for getting metadata about a schema.
 * `Get-YMsSqlTable` for getting metadata about a table.
+* `Get-YMsSqlTableColumn` for getting metadata about a table.
 * `Initialize-YMsSqlDatabase` for creating a database.
 * `Initialze-YMsSqlSchema` for creating a schema.
 * `Invoke-YMsSqlCommand` for running queries and commands.
