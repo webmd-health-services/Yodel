@@ -1,8 +1,30 @@
 
+$script:moduleRoot = $PSScriptRoot
+
+function Get-YTMSSqlConnection
+{
+
+    $conn = Connect-YDatabase -SqlServerName (Get-YTSqlServerName) -DatabaseName 'master'
+    Initialize-YMsSqlDatabase -Connection $conn -Name 'Yodel'
+    $conn.ChangeDatabase('Yodel')
+    return $conn
+}
+
 function Get-YTSqlServerName
 {
-    Get-Content -Path (Join-Path -Path $PSScriptRoot -ChildPath '..\Server.txt' -Resolve) |
-        Select-Object -First 1
+    $serverTxtPath = Join-Path -Path $script:moduleRoot -ChildPath '..\Server.txt' -Resolve -ErrorAction Ignore
+
+    if ($serverTxtPath)
+    {
+        $sqlServerName = Get-Content -Path $serverTxtPath | Select-Object -First 1
+    }
+
+    if (-not $sqlServerName)
+    {
+        return '.'
+    }
+
+    return $sqlServerName
 }
 
 function Get-YTUserCredential
@@ -10,7 +32,86 @@ function Get-YTUserCredential
     [pscredential]::New('yodeltest', (ConvertTo-SecureString -String 'P@$$w0rd' -Force -AsPlainText))
 }
 
-function GivenTestUser
+function GivenMSSqlExtendedProperty
+{
+    param(
+        [String] $Named,
+        [String] $WithValue,
+        [String] $OnSchema,
+        [String] $OnTable,
+        [String] $OnColumn
+    )
+
+    $setArgs = @{
+        Connection = Get-YTMSSqlConnection;
+        Name = $Named;
+        Value = $WithValue;
+    }
+
+    if ($OnSchema)
+    {
+        $setArgs['SchemaName'] = $OnSchema
+    }
+
+    if ($OnTable)
+    {
+        $setArgs['TableName'] = $OnTable
+    }
+
+    if ($OnColumn)
+    {
+        $setArgs['ColumnName'] = $OnColumn
+    }
+
+    Set-YMsSqlExtendedProperty @setArgs
+}
+
+function GivenMSSqlSchema
+{
+    param(
+        [String] $Named
+    )
+
+    $conn = Get-YTMSSqlConnection
+    Initialize-YMsSqlSchema -Connection $conn -Name $named
+}
+
+function GivenMSSqlTable
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Position=0)]
+        [String] $Named,
+
+        [String] $InSchema,
+
+        [Parameter(Position=1)]
+        [String[]] $Column
+    )
+
+    $schemaArg = @{}
+    $schemaNamePart = ''
+    if ($InSchema)
+    {
+        $schemaArg['SchemaName'] = $InSchema
+        $schemaNamePart = "[${InSchema}]."
+    }
+
+    $conn = Get-YTMSSqlConnection
+    if ((Test-YMsSqlTable -Connection $conn -Name $Named @schemaArg))
+    {
+        Remove-YMsSqlTable -Connection $conn -Name $Named @schemaArg
+    }
+
+    $ddl = @"
+create table ${schemaNamePart}[${Named}] (
+    $($Column -join ", $([Environment]::NewLine)    ")
+)
+"@
+    Invoke-YMsSqlCommand -Connection (Get-YTMSSqlConnection) -Text $ddl -NonQuery
+}
+
+function GivenMSSqlTestUser
 {
     param(
         [Parameter(Mandatory)]
@@ -42,4 +143,55 @@ function GivenTestUser
         $cmd.Dispose()
         $conn.Close()
     }
+}
+
+function ThenMSSqlExtendedProperty
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position=0)]
+        [String] $Named,
+
+        [Parameter(Mandatory, ParameterSetName='OnSchema')]
+        [String] $OnSchema,
+
+        [Parameter(ParameterSetName='OnTable')]
+        [String] $InSchema,
+
+        [Parameter(Mandatory, ParameterSetName='OnTable')]
+        [Parameter(Mandatory, ParameterSetName='OnColumn')]
+        [String] $OnTable,
+
+        [Parameter(Mandatory, ParameterSetName='OnColumn')]
+        [String] $OnColumn,
+
+        [String] $HasValue
+    )
+
+    $getArgs = @{
+        Connection = (Get-YTMSSqlConnection);
+        Name = $Named;
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq 'OnSchema')
+    {
+        $getArgs['SchemaName'] = $OnSchema
+    }
+    elseif ($PSCmdlet.ParameterSetName -in @('OnTable', 'OnColumn'))
+    {
+        if ($InSchema)
+        {
+            $getArgs['SchemaName'] = $InSchema
+        }
+        $getArgs['TableName'] = $OnTable
+
+        if ($PSBoundParameters.ContainsKey('OnColumn'))
+        {
+            $getArgs['ColumnName'] = $OnColumn
+        }
+    }
+
+    $prop = Get-YMsSqlExtendedProperty @getArgs
+    $prop | Should -Not -BeNullOrEmpty
+    $prop.value | Should -Be $HasValue
 }

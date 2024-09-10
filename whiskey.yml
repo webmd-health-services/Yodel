@@ -4,18 +4,42 @@ PublishOn:
 - prerelease
 
 Build:
+- PowerShell:
+    IfExists: env:MSSQL_SERVICE_NAME
+    ScriptBlock: |
+        Get-ChildItem -Path 'env:MSSQL_*' | Format-Table -Auto
+        Start-Service -Name $env:MSSQL_SERVICE_NAME -PassThru | Format-Table -Auto
+
 - Version:
     Path: Yodel\Yodel.psd1
     Prerelease:
-    - prerelease: alpha.$(WHISKEY_BUILD_NUMBER)
+    - main: ""
+    - master: ""
+    - "*": rc1
+    IncrementPrereleaseVersion: true
+
+# Update the AppVeyor build/version number.
+- Exec:
+      OnlyBy: BuildServer
+      Path: appveyor
+      Argument: [ UpdateBuild, -Version, "$(WHISKEY_SEMVER2)+$(WHISKEY_BUILD_NUMBER)" ]
+
+- CopyFile:
+    Path:
+    - CHANGELOG.md
+    - README.md
+    - LICENSE.txt
+    - NOTICE.txt
+    DestinationDirectory: Yodel
 
 # Dot-sourcing files is expensive. Move all functions into your .psm1 file to
-# improve import speed. Do this before testing to ensure your module still 
+# improve import speed. Do this before testing to ensure your module still
 # works.
 - MergeFile:
     OnlyBy: BuildServer
     Path:
     - Yodel\Functions\*.ps1
+    - Yodel\Functions\MsSql\*.ps1
     DestinationPath: Yodel\Yodel.psm1
     DeleteSourceFiles: true
     TextSeparator: "$(NewLine)$(NewLine)"
@@ -23,48 +47,55 @@ Build:
 - File:
     IfExists: env:APPVEYOR
     Path: Tests\Server.txt
-    Content: '.\SQL2017'
+    Content: $(MSSQL_INSTANCE_NAME)
 
 - File:
     UnlessExists: env:APPVEYOR
     Path: Tests\Server.txt
     Content: '.'
 
-- Pester4:
-    Script: Tests\*.Tests.ps1
-
 - Zip:
-    ArchivePath: .output\Yodel.zip
+    ArchivePath: .output\Yodel-$(WHISKEY_SEMVER2).zip
     Path:
     - Yodel
     Exclude:
     - "*.orig"
 
-Publish:
+- Exec:
+    OnlyBy: BuildServer
+    Path: appveyor
+    Argument: [ 'PushArtifact', '.output/Yodel-$(WHISKEY_SEMVER2).zip', '-DeploymentName', 'GitHub' ]
+
+- Pester:
+    Configuration:
+        TestResult:
+            Enabled: true
+            OutputPath: .output\pester.xml
+            TestSuiteName: Yodel
+        Output:
+            Verbosity: Detailed
+        Run:
+            Path: Tests\*.Tests.ps1
+            ExcludePath:
+            - "*\\Connect-YDatabase.Tests.ps1"
+            - "*\\Import-Yodel.Tests.ps1"
+            - "*\\Invoke-YDbCommand.Tests.ps1"
+
+- Pester4:
+    Script:
+    - Tests\Connect-YDatabase.Tests.ps1
+    - Tests\Import-Yodel.Tests.ps1
+    - Tests\Invoke-YDbCommand.Tests.ps1
+
 - PublishPowerShellModule:
-    UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
     Path: Yodel
-    RepositoryName: PSGallery
-    RepositoryUri: https://www.powershellgallery.com/api/v2/
-    ApiKeyID: powershellgallery.com
 
-- SetVariableFromPowerShellDataFile:
-    Path: Yodel\Yodel.psd1
-    Variables:
-        PrivateData:
-            PSData:
-                ReleaseNotes: RELEASE_NOTES
-
-- GitHubRelease:
-    UnlessExists: env:APPVEYOR_PULL_REQUEST_NUMBER
-    RepositoryName: webmd-health-services/Yodel
-    ApiKeyID: github.com
-    Tag: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
-    Commitish: $(WHISKEY_SCM_COMMIT_ID)
-    Name: $(WHISKEY_SEMVER2_NO_BUILD_METADATA)
-    Description: $(RELEASE_NOTES)
-    Assets:
-    - Path: .output\Yodel.zip
-      ContentType: application/zip
-      Name: Yodel-$(WHISKEY_SEMVER2_NO_BUILD_METADATA).zip
-
+- Exec:
+    OnlyBy: BuildServer
+    Path: appveyor
+    Argument: [
+        'PushArtifact',
+        '.output/Yodel.$(WHISKEY_SEMVER2_NO_BUILD_METADATA).nupkg',
+        '-DeploymentName',
+        'PowerShellGallery'
+    ]

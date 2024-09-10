@@ -89,7 +89,7 @@ Describe 'Connect-YDatabase.when connecting to SQL Server with credential' {
     AfterEach { Reset }
     It 'should open the connection' {
         Init
-        $credential = GivenTestUser -SqlServerName $sqlServerName
+        $credential = GivenMsSqlTestUser -SqlServerName $sqlServerName
         WhenOpeningConnection -ToServer $sqlServerName -ToDatabase 'master' -WithCredential $credential
         ThenConnectionOpened
     }

@@ -5,7 +5,7 @@
     RootModule = 'Yodel.psm1'
 
     # Version number of this module.
-    ModuleVersion = '1.0.0'
+    ModuleVersion = '1.1.0'
 
     # ID used to uniquely identify this module
     GUID = 'E15575BE-4C09-487D-B831-BCE4FCCFFBC4'
@@ -65,7 +65,23 @@
     FunctionsToExport = @(
                             'Connect-YDatabase',
                             'Invoke-YDbCommand',
-                            'Invoke-YSqlServerCommand'
+
+                            # Microsoft SQL Server functions
+                            'ConvertTo-YMsSqlIdentifier',
+                            'Get-YMsSqlExtendedProperty',
+                            'Get-YMsSqlSchema',
+                            'Get-YMsSqlTable',
+                            'Get-YMsSqlTableColumn',
+                            'Initialize-YMsSqlDatabase',
+                            'Initialize-YMsSqlSchema',
+                            'Invoke-YMsSqlCommand',
+                            'Invoke-YSqlServerCommand',
+                            'Remove-YMsSqlTable',
+                            'Set-YMsSqlExtendedProperty',
+                            'Test-YMsSqlExtendedProperty',
+                            'Test-YMsSqlSchema',
+                            'Test-YMsSqlTable',
+                            'Test-YMsSqlTableColumn'
                          )
 
     # Cmdlets to export from this module. By default, you get a script module, so there are no cmdlets.
@@ -107,11 +123,7 @@
             Prerelease = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = @'
-* Created Connect-YDatabase function for connecting to an ADO.NET data source, like a SQL Server database.
-* Created Invoke-YDbCommand function for executing an ADO.NET command, like a SQL query or stored procedure.
-* Created Invoke-YSqlServerCommand function for executing commands against a SQL Server database.
-'@
+            ReleaseNotes = 'https://github.com/webmd-health-services/Yodel/blob/main/CHANGELOG.md'
         } # End of PSData hashtable
 
     } # End of PrivateData hashtable
